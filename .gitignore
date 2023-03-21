@@ -1,0 +1,26 @@
+# Rubbish
+.DS_Store
+
+# Dependency directories
+node_modules
+
+# Built files
+dist
+.dev
+.gh-pages
+/coverage
+.idea/
+test-page/dist
+
+# Cypress Tests
+cypress/dist
+cypress/screenshots
+cypress/videos
+
+
+target
+.bsp
+.metals
+
+# Yarn
+.yarn/*

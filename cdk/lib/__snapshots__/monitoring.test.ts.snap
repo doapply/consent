@@ -1,0 +1,294 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`The Monitoring stack matches the snapshot 1`] = `
+Object {
+  "Metadata": Object {
+    "gu:cdk:constructs": Array [
+      "GuDistributionBucketParameter",
+      "GuLambdaFunction",
+    ],
+    "gu:cdk:version": "TEST",
+  },
+  "Parameters": Object {
+    "DistributionBucketName": Object {
+      "Default": "/account/services/artifact.bucket",
+      "Description": "SSM parameter containing the S3 bucket name holding distribution artifacts",
+      "Type": "AWS::SSM::Parameter::Value<String>",
+    },
+  },
+  "Resources": Object {
+    "cmpmonitoring2CD05B94": Object {
+      "DependsOn": Array [
+        "cmpmonitoringServiceRoleDefaultPolicy19C1C252",
+        "cmpmonitoringServiceRole3F7FDCEC",
+      ],
+      "Properties": Object {
+        "Code": Object {
+          "S3Bucket": Object {
+            "Ref": "DistributionBucketName",
+          },
+          "S3Key": "cmp-monitoring/PROD/cmp-monitoring-lambda-eu-west-1/cmp-monitoring-lambda-eu-west-1.zip",
+        },
+        "Environment": Object {
+          "Variables": Object {
+            "APP": "cmp-monitoring-lambda-eu-west-1",
+            "STACK": "cmp-monitoring",
+            "STAGE": "PROD",
+          },
+        },
+        "FunctionName": "cmp-monitoring-PROD",
+        "Handler": "index.handler",
+        "MemorySize": 2048,
+        "Role": Object {
+          "Fn::GetAtt": Array [
+            "cmpmonitoringServiceRole3F7FDCEC",
+            "Arn",
+          ],
+        },
+        "Runtime": "nodejs14.x",
+        "Tags": Array [
+          Object {
+            "Key": "App",
+            "Value": "cmp-monitoring-lambda-eu-west-1",
+          },
+          Object {
+            "Key": "gu:cdk:version",
+            "Value": "TEST",
+          },
+          Object {
+            "Key": "gu:repo",
+            "Value": "guardian/consent-management-platform",
+          },
+          Object {
+            "Key": "Stack",
+            "Value": "cmp-monitoring",
+          },
+          Object {
+            "Key": "Stage",
+            "Value": "PROD",
+          },
+        ],
+        "Timeout": 300,
+      },
+      "Type": "AWS::Lambda::Function",
+    },
+    "cmpmonitoringServiceRole3F7FDCEC": Object {
+      "Properties": Object {
+        "AssumeRolePolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": Object {
+                "Service": "lambda.amazonaws.com",
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "ManagedPolicyArns": Array [
+          Object {
+            "Fn::Join": Array [
+              "",
+              Array [
+                "arn:",
+                Object {
+                  "Ref": "AWS::Partition",
+                },
+                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+              ],
+            ],
+          },
+        ],
+        "Tags": Array [
+          Object {
+            "Key": "App",
+            "Value": "cmp-monitoring-lambda-eu-west-1",
+          },
+          Object {
+            "Key": "gu:cdk:version",
+            "Value": "TEST",
+          },
+          Object {
+            "Key": "gu:repo",
+            "Value": "guardian/consent-management-platform",
+          },
+          Object {
+            "Key": "Stack",
+            "Value": "cmp-monitoring",
+          },
+          Object {
+            "Key": "Stage",
+            "Value": "PROD",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Role",
+    },
+    "cmpmonitoringServiceRoleDefaultPolicy19C1C252": Object {
+      "Properties": Object {
+        "PolicyDocument": Object {
+          "Statement": Array [
+            Object {
+              "Action": "cloudwatch:PutMetricData",
+              "Effect": "Allow",
+              "Resource": "*",
+            },
+            Object {
+              "Action": Array [
+                "s3:GetObject*",
+                "s3:GetBucket*",
+                "s3:List*",
+              ],
+              "Effect": "Allow",
+              "Resource": Array [
+                Object {
+                  "Fn::Join": Array [
+                    "",
+                    Array [
+                      "arn:",
+                      Object {
+                        "Ref": "AWS::Partition",
+                      },
+                      ":s3:::",
+                      Object {
+                        "Ref": "DistributionBucketName",
+                      },
+                    ],
+                  ],
+                },
+                Object {
+                  "Fn::Join": Array [
+                    "",
+                    Array [
+                      "arn:",
+                      Object {
+                        "Ref": "AWS::Partition",
+                      },
+                      ":s3:::",
+                      Object {
+                        "Ref": "DistributionBucketName",
+                      },
+                      "/cmp-monitoring/PROD/cmp-monitoring-lambda-eu-west-1/cmp-monitoring-lambda-eu-west-1.zip",
+                    ],
+                  ],
+                },
+              ],
+            },
+            Object {
+              "Action": "ssm:GetParametersByPath",
+              "Effect": "Allow",
+              "Resource": Object {
+                "Fn::Join": Array [
+                  "",
+                  Array [
+                    "arn:aws:ssm:",
+                    Object {
+                      "Ref": "AWS::Region",
+                    },
+                    ":",
+                    Object {
+                      "Ref": "AWS::AccountId",
+                    },
+                    ":parameter/PROD/cmp-monitoring/cmp-monitoring-lambda-eu-west-1",
+                  ],
+                ],
+              },
+            },
+            Object {
+              "Action": Array [
+                "ssm:GetParameters",
+                "ssm:GetParameter",
+              ],
+              "Effect": "Allow",
+              "Resource": Object {
+                "Fn::Join": Array [
+                  "",
+                  Array [
+                    "arn:aws:ssm:",
+                    Object {
+                      "Ref": "AWS::Region",
+                    },
+                    ":",
+                    Object {
+                      "Ref": "AWS::AccountId",
+                    },
+                    ":parameter/PROD/cmp-monitoring/cmp-monitoring-lambda-eu-west-1/*",
+                  ],
+                ],
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "PolicyName": "cmpmonitoringServiceRoleDefaultPolicy19C1C252",
+        "Roles": Array [
+          Object {
+            "Ref": "cmpmonitoringServiceRole3F7FDCEC",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Policy",
+    },
+    "cmpmonitoringalarms68497862": Object {
+      "Properties": Object {
+        "AlarmDescription": "Alarm if the SUM of Errors is greater than or equal to the threshold (1) for 1 evaluation period",
+        "ComparisonOperator": "GreaterThanOrEqualToThreshold",
+        "Dimensions": Array [
+          Object {
+            "Name": "FunctionName",
+            "Value": Object {
+              "Ref": "cmpmonitoring2CD05B94",
+            },
+          },
+        ],
+        "EvaluationPeriods": 1,
+        "MetricName": "Errors",
+        "Namespace": "AWS/Lambda",
+        "Period": 60,
+        "Statistic": "Sum",
+        "Threshold": 1,
+      },
+      "Type": "AWS::CloudWatch::Alarm",
+    },
+    "cmpmonitoringscheduleAllowEventRuleCmpMonitoringStackcmpmonitoring0A19AA24A7F368FB": Object {
+      "Properties": Object {
+        "Action": "lambda:InvokeFunction",
+        "FunctionName": Object {
+          "Fn::GetAtt": Array [
+            "cmpmonitoring2CD05B94",
+            "Arn",
+          ],
+        },
+        "Principal": "events.amazonaws.com",
+        "SourceArn": Object {
+          "Fn::GetAtt": Array [
+            "cmpmonitoringscheduleFB1DBC53",
+            "Arn",
+          ],
+        },
+      },
+      "Type": "AWS::Lambda::Permission",
+    },
+    "cmpmonitoringscheduleFB1DBC53": Object {
+      "Properties": Object {
+        "ScheduleExpression": "rate(2 minutes)",
+        "State": "ENABLED",
+        "Targets": Array [
+          Object {
+            "Arn": Object {
+              "Fn::GetAtt": Array [
+                "cmpmonitoring2CD05B94",
+                "Arn",
+              ],
+            },
+            "Id": "Target0",
+            "Input": "{\\"stage\\":\\"PROD\\",\\"region\\":\\"eu-west-1\\"}",
+          },
+        ],
+      },
+      "Type": "AWS::Events::Rule",
+    },
+  },
+}
+`;
